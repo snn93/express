@@ -37,4 +37,4 @@ const products = [
   },
 ];
 
-module.exports = food;
+module.exports = products;

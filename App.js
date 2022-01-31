@@ -1,23 +1,36 @@
 const express = require("express");
 const res = require("express/lib/response");
-const food = require("./food");
+let products = require("./products");
 const app = express();
 
-//get all food
-app.get("/"),
-  (req, res) => {
-    console.log("hello");
-    res.json({ song: "helloooooooooooo" });
-  };
+app.use(express.json());
+app.get("/", (req, res) => {
+  console.log(products);
+  res.json(products);
+});
 
-// get detail food (changing value)
-app.get("/food/:id"),
-  (req, res) => {
-    const { id } = req.params;
-    const foodOne = food.find((e) => e.id === +id);
-    res.json(foodOne);
-  };
+app.post("/api/products", (req, res) => {
+  // req.body.id = products.length + 1;
+  const newProduct = { ...req.body, id: products.length + 1 };
+  products.push(newProduct);
+  // res.status(201);
+  res.status(201).json(newProduct);
+});
 
-app.listen(8080, () => {
-  console.log("this app is running on 8080");
+app.delete("/api/products/:productId"),
+  (req, res) => {
+    const { productId } = req.params;
+    // const productId = req.params.productId;
+    const newArray = products.filter((product) => product.id !== +productId);
+    products = newArray;
+    res.status(204).end();
+  };
+//
+// const foundProduct = products.find((product) => product.id === +productId);
+// if (foundProduct) {
+//   res.status(204).end();
+// }
+
+app.listen(8000, () => {
+  console.log("yayy this app is running on 8000");
 });
