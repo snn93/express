@@ -1,35 +1,18 @@
 const express = require("express");
-const res = require("express/lib/response");
-let products = require("./products");
 const app = express();
+const productRoutes = require("./apis/products/routes");
+// const PORT = 8000;
+// const connectDB = require("./db/database");
 
 app.use(express.json());
-app.get("/", (req, res) => {
-  console.log(products);
-  res.json(products);
-});
+app.use("/api/products", productRoutes);
 
-app.post("/api/products", (req, res) => {
-  // req.body.id = products.length + 1;
-  const newProduct = { ...req.body, id: products.length + 1 };
-  products.push(newProduct);
-  // res.status(201);
-  res.status(201).json(newProduct);
-});
+// app.use((req, res, next) => {
+//   console.log(`${req.method} ${req.protocol}://${req.get("host")}${req.path}`);
+// });
 
-app.delete("/api/products/:productId"),
-  (req, res) => {
-    const { productId } = req.params;
-    // const productId = req.params.productId;
-    const newArray = products.filter((product) => product.id !== +productId);
-    products = newArray;
-    res.status(204).end();
-  };
-//
-// const foundProduct = products.find((product) => product.id === +productId);
-// if (foundProduct) {
-//   res.status(204).end();
-// }
+// app.use((err, req, res, next));
+// connectDB();
 
 app.listen(8000, () => {
   console.log("yayy this app is running on 8000");
